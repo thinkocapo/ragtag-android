@@ -23,25 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        int permissionCheck = ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CAMERA);
-//
-//        // Check if permission was Granted
-//        // Ask for permission, if permission was not granted (probably due to higher api level)
-//        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-//            Log.v(null, "+++++++++++ MainActivity - CAMERA permission GRANTED +++++++++++");
-//        } else {
-//            Log.v(null, "+++++++++++ MainACtivity CAMERA permission NOT - GRANTED +++++++++++");
-////            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL); // didn't do anything...
-//            if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
-//                Toast.makeText(this,"No Permission to use the Camera services", Toast.LENGTH_SHORT).show();
-//            }
-//            requestPermissions(new String[] {android.Manifest.permission.CAMERA},REQUEST_CAMERA_RESULT);
-//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        myIntent.putExtra("key", "theValue"); //Optional parameters
         getBaseContext().startActivity(myIntent);
 
