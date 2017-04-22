@@ -28,12 +28,25 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/latitude_text"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textColorHighlight="@android:color/primary_text_dark"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="50dp"/>
+    <!--android:text="hello_world"-->
 
-    <!--<Button-->
-        <!--android:id="@+id/button_capture"-->
-        <!--android:text="Capture"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--/>-->
+    <TextView
+        android:id="@+id/longitude_text"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textColorHighlight="@android:color/primary_text_dark"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="50dp"/>
+
 </RelativeLayout>

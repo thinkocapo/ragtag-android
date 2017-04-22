@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        ragtag {
+            keyAlias 'ragtagkeystore'
+            keyPassword 'androidstudio'
+            storeFile file('/Users/WillsHome/Projects/keystores/ragtag_keystore/ragtag.jks')
+            storePassword 'androidstudio'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -28,5 +36,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
+    compile 'com.google.android.gms:play-services:7+'
     testCompile 'junit:junit:4.12'
 }
