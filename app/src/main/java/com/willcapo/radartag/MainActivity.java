@@ -20,48 +20,43 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationListener;
 
-//import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.plus.Plus;
+// extends ApplicationContext
 
-import org.w3c.dom.Text;
-
-// extends ApplicationContext // protected void onStart();
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    // http://stackoverflow.com/questions/40353706/lacking-privileges-to-access-camera-service-in-android-6-0
-//    private static final int REQUEST_CAMERA_RESULT = 1;
-
+// 4/23 7:07p video 0:20 says there's a 3rd to implement?
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    private static final String LOG_TAG ="MainActivity";
+    private TextView txtOutput;
     private GoogleApiClient mGoogleApiClient;
-
-//    private LocationServices mLastLocation;// = new Location("");
+    private LocationRequest mLocationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        txtOutput = (TextView) findViewById(R.id.txtOutput);
+
+        //super.onStart(); // need .onStart. need to extend ApplicationContext instead of AppCompatActivity
+//        onStart(); 4/23 7:54P something else is calling this?
 
         Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // myIntent.putExtra("key", "theValue"); //Optional parameters
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getBaseContext().startActivity(myIntent);
 
-        // 4/22 18:11
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addApi(Plus.API) // doesn't help 18:39p
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
 
-        // taken from 'onStart' method 18:48p https://developer.android.com/training/location/retrieve-current.html
-        mGoogleApiClient.connect(); // could add to super's .onStart() method? or better to make a local self.onStart()
-        super.onStart();
-
-        // need .onStart. need to extend ApplicationContext instead of AppCompatActivity
     }
 
     @Override
@@ -87,27 +82,83 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-        @Override
-    public void onConnected(Bundle bundle) {
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
+    @Override
+    protected void onStart() {
+        Log.i(LOG_TAG, "onStart() called");
+        super.onStart();
+        // Connect the client
+        // ..write code
+        // Check for permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i(LOG_TAG, "onStart() location permission was not granted...");
+            ActivityCompat.requestPermissions(
+                    this, // Activity
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        } else {
+            Log.i(LOG_TAG, "onStart() location permission was granted?");
+            mGoogleApiClient.connect();
+        }
 
-            // 4/22 19:06p
-            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                TextView mLatitudeText = (TextView) findViewById((R.id.latitude_text));
-                mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude())); // not a double or a string
+    }
 
-                TextView mLongitudeText = (TextView) findViewById((R.id.longitude_text));
-                mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude())); // not TextView, Location
+    // Get permission result
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.i(LOG_TAG, "onRequestPermissionResult(cb) called...");
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                    Log.i(LOG_TAG, "Permission was granted");
+                    mGoogleApiClient.connect();
+
+                } else {
+                    // permission was denied
+                }
+                return;
             }
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        //Disconnect the client
+        // ...write code
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+            Log.v(LOG_TAG, " onConnected **********");
+            mLocationRequest = LocationRequest.create();
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setInterval(1000);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    // *
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i(LOG_TAG, "onLocationChanged(cb) | " + location.toString());
+        txtOutput.setText(location.toString());
+        Log.i(LOG_TAG, "onLocationChanged(cb) | text that was set | " + txtOutput.getText());
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i(LOG_TAG, "GoogleApiClient connection has been suspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 }

@@ -48,5 +48,11 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:textSize="50dp"/>
+    
+    <TextView
+        android:text="Location Goes Here"
+        android:id="@+id/txtOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

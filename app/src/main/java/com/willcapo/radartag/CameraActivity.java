@@ -46,7 +46,6 @@ public class CameraActivity extends Activity {
             new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                    Log.v(TAG, "==== LISTENER...");
                     setupCamera(width, height);
                     openCamera();
                 }
@@ -74,12 +73,10 @@ public class CameraActivity extends Activity {
         @Override
         public void onOpened(CameraDevice camera) {
             mCameraDevice = camera;
-            Log.v(TAG, "===== onOpened ====");
-            Toast.makeText(getApplicationContext(), "Camera Opened, Will!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Camera Opened, Will!", Toast.LENGTH_SHORT).show();
 
             // Nigel Part 4 : * https://www.youtube.com/watch?v=xK9fvxGzM1Q 2:04
             createCameraPreviewSession();
-            // ?
         }
 
         @Override
@@ -199,9 +196,9 @@ public class CameraActivity extends Activity {
         // Check if permission was Granted
         // Ask for permission, if permission was not granted (probably due to higher api level)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Log.v(null, "+++++++++++ MainActivity - CAMERA permission GRANTED +++++++++++");
+            Log.v(TAG, "| CAMERA permission GRANTED +++++++++++");
         } else {
-            Log.v(null, "+++++++++++ MainACtivity CAMERA permission NOT - GRANTED +++++++++++");
+            Log.v(TAG, "| CAMERA permission NOT - GRANTED +++++++++++");
 //            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL); // didn't do anything...
             if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
                 Toast.makeText(this,"No Permission to use the Camera services", Toast.LENGTH_SHORT).show();
