@@ -87,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onStart() {
         Log.i(LOG_TAG, "onStart() called");
         super.onStart();
-        // Connect the client
-        // ..write code
+
+        // 4/23 8:09p Had to add this code because it wants Run-Time Permission http://stackoverflow.com/questions/38508352/client-must-have-access-fine-location-permission-to-request-priority-high-accura
         // Check for permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -120,12 +120,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 } else {
                     // permission was denied
+                    mGoogleApiClient.connect();
+
                 }
                 return;
             }
         }
     }
 
+
+//    private int i = 0;
+//    public void runOnUiThread(new Runnable() {
+//
+//        @Override
+//        public void run() {
+//            TextView tv = (TextView) findViewById(R.id.txtOutput);//Text To be edited
+//            tv.setText("test"+i);//Set the Text
+//            i++;
+//        }
+//    });
 
     @Override
     protected void onStop() {
@@ -137,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
-            Log.v(LOG_TAG, " onConnected **********");
+            Log.v(LOG_TAG, " onConnected ");
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             mLocationRequest.setInterval(1000);
@@ -147,9 +160,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     // *
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(LOG_TAG, "onLocationChanged(cb) | " + location.toString());
-        txtOutput.setText(location.toString());
-        Log.i(LOG_TAG, "onLocationChanged(cb) | text that was set | " + txtOutput.getText());
+        Log.v(LOG_TAG, " onLocationChanged(cb) 1 ");
+
+        // 4/23 8:45p
+        // Attempt 2
+        final Location aLocation = location;
+        txtOutput.post(new Runnable(){
+            @Override
+            public void run(){
+                Log.i(LOG_TAG, "RUnnable is running....");
+                txtOutput.setText(aLocation.toString()); // location.toString cannot access location due to inner class
+            }
+        });
+
+        // [OR]
+
+        // Attempt 1
+//        Log.i(LOG_TAG, "onLocationChanged(cb) 22 " + location.toString());
+//        txtOutput.setText(location.toString());
+//        Log.i(LOG_TAG, "onLocationChanged(cb) 3 text that was set | " + txtOutput.getText());
     }
 
     @Override

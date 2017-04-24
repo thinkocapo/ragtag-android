@@ -173,7 +173,6 @@ public class CameraActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, "======= CameraActivity onCreate ======");
 
         setContentView(R.layout.content_main);
         mTextureView = (TextureView) findViewById(R.id.textureView);
@@ -191,15 +190,13 @@ public class CameraActivity extends Activity {
 
     private static final int REQUEST_CAMERA_RESULT = 1;
     private void openCamera() {
-        Log.v(TAG, "====== openCamera ====");
         int permissionCheck = ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CAMERA);
         // Check if permission was Granted
         // Ask for permission, if permission was not granted (probably due to higher api level)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "| CAMERA permission GRANTED +++++++++++");
+            Log.v(TAG, "CAMERA permission GRANTED");
         } else {
-            Log.v(TAG, "| CAMERA permission NOT - GRANTED +++++++++++");
-//            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL); // didn't do anything...
+            Log.v(TAG, "CAMERA permission NOT - GRANTED");
             if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)){
                 Toast.makeText(this,"No Permission to use the Camera services", Toast.LENGTH_SHORT).show();
             }
@@ -215,7 +212,6 @@ public class CameraActivity extends Activity {
     }
 
     private void setupCamera(int width, int height) {
-        Log.v(TAG, "====== setupCamera ====");
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
             for (String cameraId : cameraManager.getCameraIdList()) {
