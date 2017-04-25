@@ -1,10 +1,12 @@
 package com.willcapo.radartag;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getBaseContext().startActivity(myIntent);
+        //startActivity(myIntent);
 
 
     }
@@ -128,18 +130,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-
-//    private int i = 0;
-//    public void runOnUiThread(new Runnable() {
-//
-//        @Override
-//        public void run() {
-//            TextView tv = (TextView) findViewById(R.id.txtOutput);//Text To be edited
-//            tv.setText("test"+i);//Set the Text
-//            i++;
-//        }
-//    });
-
     @Override
     protected void onStop() {
         //Disconnect the client
@@ -153,32 +143,38 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Log.v(LOG_TAG, " onConnected ");
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(1000);
+            mLocationRequest.setInterval(10000);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
+    //private Handler mHandler = new Handler();
     // *
     @Override
     public void onLocationChanged(Location location) {
-        Log.v(LOG_TAG, " onLocationChanged(cb) 1 ");
+        Log.v(LOG_TAG, " onLocationChanged()");
+
+//        txtOutput = (TextView) ((Activity)this).findViewById(R.id.txtOutput);
+
 
         // 4/23 8:45p
         // Attempt 2
         final Location aLocation = location;
-        txtOutput.post(new Runnable(){
+        txtOutput.post(new Runnable(){ // mHandler or txtOutput works
+//        txtOutput.post(new Runnable(){
             @Override
             public void run(){
-                Log.i(LOG_TAG, "RUnnable is running....");
-                txtOutput.setText(aLocation.toString()); // location.toString cannot access location due to inner class
+                Log.i(LOG_TAG, "Runnable is running....");
+                txtOutput.setText(aLocation.toString());
+                txtOutput.invalidate();
+                Log.i(LOG_TAG, "HELLO: " + txtOutput.getText());
             }
         });
 
-        // [OR]
-
-        // Attempt 1
-//        Log.i(LOG_TAG, "onLocationChanged(cb) 22 " + location.toString());
-//        txtOutput.setText(location.toString());
-//        Log.i(LOG_TAG, "onLocationChanged(cb) 3 text that was set | " + txtOutput.getText());
+        // 4/24 7:16p
+        // runOnUiThread --> new Runnable
+        // check TextView is not null
+        // inValdiate
+        //
     }
 
     @Override
