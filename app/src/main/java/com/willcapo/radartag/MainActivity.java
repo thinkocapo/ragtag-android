@@ -147,14 +147,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
-    //private Handler mHandler = new Handler();
-    // *
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOG_TAG, " onLocationChanged()");
-
-//        txtOutput = (TextView) ((Activity)this).findViewById(R.id.txtOutput);
-
 
         // 4/23 8:45p
         // Attempt 2
@@ -167,14 +162,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 txtOutput.setText(aLocation.toString());
                 txtOutput.invalidate();
                 Log.i(LOG_TAG, "HELLO: " + txtOutput.getText());
+
+                // 4/28 7:12p
+                // Why, what is CharSequence?
+                // Convert to JSON structure?
+                // method for preparing as JSON. may need to import a package
+                CharSequence text = txtOutput.getText();
+                sendGeoUpdate(text);
             }
         });
 
-        // 4/24 7:16p
-        // runOnUiThread --> new Runnable
-        // check TextView is not null
-        // inValdiate
-        //
     }
 
     @Override
@@ -185,5 +182,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
+    }
+
+    /*
+    // ragtag methods
+    // 4/22 7:16p
+     */
+
+    // or send an object (<HashMap>) of the latitude, longitude
+    public void sendGeoUpdate(CharSequence text) {
+        // Call Firebase
     }
 }
