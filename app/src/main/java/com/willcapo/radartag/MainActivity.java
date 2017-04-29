@@ -29,6 +29,22 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationListener;
 
+
+
+// 4/28 8:23p trying Firebase Assistant https://firebase.google.com/docs/android/setup#next_steps
+// previous time was done with https://cloud.google.com/solutions/mobile/firebase-app-engine-android-studio#adding_a_user_interface_to_your_android_app
+
+// 8:41p ran Firebase Assistant and now these packages are recognized
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+
+
 // extends ApplicationContext
 
 // 4/23 7:07p video 0:20 says there's a 3rd to implement?
@@ -118,11 +134,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted
                     Log.i(LOG_TAG, "Permission was granted");
+                    // 4/28 9:34p included mGoogleApiClient.connect() again because fixed 10.0.1 issue in build.gradle
                     mGoogleApiClient.connect();
 
                 } else {
                     // permission was denied
-                    mGoogleApiClient.connect();
+                    //mGoogleApiClient.connect();
 
                 }
                 return;
@@ -191,6 +208,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     // or send an object (<HashMap>) of the latitude, longitude
     public void sendGeoUpdate(CharSequence text) {
+        Log.i(LOG_TAG, "sendGeoUpdate" + text);
+        // Setup Firebase App
         // Call Firebase
+        // 8:24p
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("message");
+
+        // 8:25p
+        // convert CharSequenc (in previous func invocation to String type)
+//        myRef.setValue("Hello, World!");
+
+        // *
+        // 8:26p
+        // Want users (authenticated) connecting to App, using the default Databsae Rules in Firebase Console
+        // 8:27p
+        // Made .read: true, .write: true
+        // 8:28p
+        // User Authentication Guide https://firebase.google.com/docs/database/security/quickstart?utm_source=studio#sample-rules
+
     }
 }

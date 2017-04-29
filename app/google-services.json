@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1002593119466",
+    "firebase_url": "https://ragtag-15b8a.firebaseio.com",
+    "project_id": "ragtag-15b8a",
+    "storage_bucket": "ragtag-15b8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002593119466:android:6d1676abfdc46817",
+        "android_client_info": {
+          "package_name": "com.willcapo.radartag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002593119466-ca4oevcmvr5adoitqrj3d3t72sg17e5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.willcapo.radartag",
+            "certificate_hash": "6f2e78fa4645c87cd9ecfb3b904fea50be0a79b0"
+          }
+        },
+        {
+          "client_id": "1002593119466-gdi6et7fd39g8s4cl2bt95ceqgfc7mo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAyKz0VMQwD19CytIgoFFQ-myXmlbjznw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002593119466-gdi6et7fd39g8s4cl2bt95ceqgfc7mo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
