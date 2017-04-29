@@ -191,14 +191,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.i(LOG_TAG, "Runnable is running....");
                 txtOutput.setText(aLocation.toString());
                 txtOutput.invalidate();
-                Log.i(LOG_TAG, "HELLO: " + txtOutput.getText());
+                Log.i(LOG_TAG, "Latitude/Longitude: " + txtOutput.getText());
 
                 // 4/28 7:12p
                 // Why, what is CharSequence?
                 // Convert to JSON structure?
                 // method for preparing as JSON. may need to import a package
                 CharSequence text = txtOutput.getText();
-                sendGeoUpdate(text);
+                String latlong = text.toString();
+                sendGeoUpdate(latlong);
             }
         });
 
@@ -220,17 +221,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      */
 
     // or send an object (<HashMap>) of the latitude, longitude
-    public void sendGeoUpdate(CharSequence text) {
-        Log.i(LOG_TAG, "sendGeoUpdate" + text);
+    public void sendGeoUpdate(String latlong) {
+        Log.i(LOG_TAG, "sendGeoUpdate() " + latlong);
         // Setup Firebase App
         // Call Firebase
         // 8:24p
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("message");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("latLong");
+        // 4/29 12:31p
+        // reference 'latLong' is the Key (table) underneath root ragtag db
 
         // 8:25p
         // convert CharSequenc (in previous func invocation to String type)
-//        myRef.setValue("Hello, World!");
+        myRef.setValue(latlong);
 
         // *
         // 8:26p
