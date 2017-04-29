@@ -34,7 +34,7 @@ import com.google.android.gms.location.LocationListener;
 // 4/28 8:23p trying Firebase Assistant https://firebase.google.com/docs/android/setup#next_steps
 // previous time was done with https://cloud.google.com/solutions/mobile/firebase-app-engine-android-studio#adding_a_user_interface_to_your_android_app
 
-// 8:41p ran Firebase Assistant and now these packages are recognized
+ //8:41p ran Firebase Assistant and now these packages are recognized
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -108,21 +108,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // 4/23 8:09p Had to add this code because it wants Run-Time Permission http://stackoverflow.com/questions/38508352/client-must-have-access-fine-location-permission-to-request-priority-high-accura
         // Check for permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.i(LOG_TAG, "onStart() location permission was not granted...");
-            ActivityCompat.requestPermissions(
-                    this, // Activity
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        } else {
-            Log.i(LOG_TAG, "onStart() location permission was granted?");
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
+        //4/29 11:28a moved this check permission code to onConnected
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            Log.i(LOG_TAG, "onStart() location permission was not granted...");
+//            ActivityCompat.requestPermissions(
+//                    this, // Activity
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+//        } else {
+//            Log.i(LOG_TAG, "onStart() location permission was granted?");
+//            mGoogleApiClient.connect();
+//        }
 
     }
 
-    // Get permission result
+    // Get permission result - never gets called?
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 } else {
                     // permission was denied
-                    //mGoogleApiClient.connect();
+                    mGoogleApiClient.connect();
 
                 }
                 return;
@@ -157,11 +158,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
-            Log.v(LOG_TAG, " onConnected ");
-            mLocationRequest = LocationRequest.create();
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(10000);
+        Log.v(LOG_TAG, " onConnected... ");
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(10000);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(LOG_TAG, "onStart() location permission was not granted...");
+            ActivityCompat.requestPermissions(
+                    this, // Activity
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        } else {
+            Log.i(LOG_TAG, "onConnected()... location permission was granted?");
+//            mGoogleApiClient.connect();
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+        }
     }
 
     @Override
@@ -221,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // *
         // 8:26p
-        // Want users (authenticated) connecting to App, using the default Databsae Rules in Firebase Console
+        // Want users (authenticated) connecting to App, using the default Database Rules in Firebase Console
         // 8:27p
         // Made .read: true, .write: true
         // 8:28p
