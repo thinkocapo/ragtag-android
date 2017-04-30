@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -177,28 +178,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+    private String latlong;
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOG_TAG, " onLocationChanged()");
 
-        // 4/23 8:45p
-        // Attempt 2
-        final Location aLocation = location;
-        txtOutput.post(new Runnable(){ // mHandler or txtOutput works
-//        txtOutput.post(new Runnable(){
+        // 4/29 1:50p
+//        final Location aLocation = location;
+        latlong = prepareLatLongString(location); // Jva CharaSequence
+
+
+        txtOutput.post(new Runnable(){
             @Override
             public void run(){
-                Log.i(LOG_TAG, "Runnable is running....");
-                txtOutput.setText(aLocation.toString());
-                txtOutput.invalidate();
-                Log.i(LOG_TAG, "Latitude/Longitude: " + txtOutput.getText());
+//                txtOutput.setText(aLocation.toString()); commented out 1:52p
 
-                // 4/28 7:12p
-                // Why, what is CharSequence?
-                // Convert to JSON structure?
-                // method for preparing as JSON. may need to import a package
-                CharSequence text = txtOutput.getText();
-                String latlong = text.toString();
+                // 4/29 1:52p
+                txtOutput.setText(latlong);
+                txtOutput.invalidate(); // still displays 4/29 1:54p
+
+                Log.i(LOG_TAG, "onLocationChanged() | Latitude/Longitude | " + latlong);
+
+//                CharSequence text = txtOutput.getText();
+//                String latlong = text.toString();
+
                 sendGeoUpdate(latlong);
             }
         });
@@ -215,33 +218,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
+
+    /*
+    // ragtag variables
+     */
+    private String deviceId;
+
     /*
     // ragtag methods
     // 4/22 7:16p
      */
 
-    // or send an object (<HashMap>) of the latitude, longitude
+    public String prepareLatLongString(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        return latitude + "," + longitude;
+    }
+
     public void sendGeoUpdate(String latlong) {
-        Log.i(LOG_TAG, "sendGeoUpdate() " + latlong);
-        // Setup Firebase App
-        // Call Firebase
-        // 8:24p
+        Log.i(LOG_TAG, "sendGeoUpdate() | latlong " + latlong);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("latLong");
+        DatabaseReference users = database.getReference("users");
         // 4/29 12:31p
         // reference 'latLong' is the Key (table) underneath root ragtag db
-
-        // 8:25p
-        // convert CharSequenc (in previous func invocation to String type)
-        myRef.setValue(latlong);
-
-        // *
-        // 8:26p
-        // Want users (authenticated) connecting to App, using the default Database Rules in Firebase Console
-        // 8:27p
-        // Made .read: true, .write: true
-        // 8:28p
-        // User Authentication Guide https://firebase.google.com/docs/database/security/quickstart?utm_source=studio#sample-rules
-
+        // 1:39p
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.i(LOG_TAG, "sendGeoUpdate() | deviceId " + deviceId);
+        users.child(deviceId).setValue(latlong); // target (destino, user2), latlong de user1,
     }
 }
