@@ -1,0 +1,44 @@
+
+Creation;
+com.willcapo.radarTag
+
+radarTag.willcapo.com
+
+Application Name: RadarTag
+Company Domain: willcapo.com
+
+
+2:08p
+Activity Name: MainActivity
+Layout Name: activity_main
+Title: Main Activity
+Menu Resource Name: menu_main
+
+checkbox:user a fragment?
+
+2:36p
+Nougat API Level 25 
+Android Google Inc.
+
+2:39p
+SDK Path /Users/WillsHome/Library/Android/sdk
+
+3:04p
+AVD Name: Nexus 6P API 25
+
+
+3:25pm
+Setting Image pixel width for Phone Size
+googled
+229px x 470px is my Nexus 6P dimension
+http://auctionrepair.com/pixels.html
+https://en.wikipedia.org/wiki/Nexus_6P
+
+3:34pm
+How to make Image Clear/Transparent https://www.youtube.com/watch?v=I20QSHGB3Mc
+PaintBrush (Macbook) - zoom in to enable ShowGrid feature
+Main_Activity_sketch1.png saved in ~/Projects
+...sending .png to AuctionRepair.com/pixels
+
+
+

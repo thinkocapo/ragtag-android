@@ -1,0 +1,32 @@
+Project
+ragtag-15b8a
+
+// Trello
+https://trello.com/b/7Mkmapvl/ragtag
+
+// Drive (Google)
+https://drive.google.com/drive/folders/0BzhSRMtwEcJWMWNZVVBuN3ZlbU0
+
+// Documentation
+https://ragtag.atlassian.net/wiki/display/RAD/Rag+Tag
+https://www.lucidchart.com/invitations/accept/fc16ce46-88f0-4945-b477-2c6023b1296d
+
+// Code Repos
+https://bitbucket.org/wcapozzoli124/ragtag
+cloudFunctions in ~/Projects and deployed from CLI. consider sharing in /radarTag project. see confluence
+
+
+// random
+"Developing for Android is horrible. I have to completey rewrite the project I am working on every few months because IDE and SDK changes completely break everything. Already sitting another 5 hours on my project, trying to get it compile again with the updated IDE. I am so looking forward the iphone implementation – John Feb 4 '16 at 16:37 "
+
+8:49p
+https://www.youtube.com/watch?v=QNb_3QKSmMk
+
+4/29 4:54p
+CloudFunctions appear to be code you deploy from CLI and there's no need to put it in your repo. see Confluence page Todos
+
+5:14p
+onDataReceived - name of cloud /functions/index.js function for receiving data from firebase clients. triggers cloud functions.
+
+05/01 8:28p
+./ragLinks.sh opens Trello and Drive

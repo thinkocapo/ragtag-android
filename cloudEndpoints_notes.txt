@@ -1,0 +1,11 @@
+Cloud Endpoints is a framework that runs on App Engine, in any language
+API gateway...distribtued
+Control lAccess, Authenticate Users ,, SCale,, Monitorying/Logging
+is in a container or deploy directoryl,
+
+"open api.yaml file" define an API and send it to Google Service Management - API Management
+
+1:34p
+API & Managmeent - Credentials, get an api key. clients must use this ..
+
+Firebase - whitelist secures piece of data for list of users

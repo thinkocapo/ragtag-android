@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //startActivity(myIntent);
+        startActivity(myIntent);
 
 
     }
