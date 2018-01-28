@@ -1,0 +1,26 @@
+Android Studio
+Download Android Studio 2.3.1 (current stable release as of 04/15/17)*
+Installation instructions here . This should also cover installing ADB (Android Debug Bridge) and AVD (Android Virtual Device). You'll use them eventually.
+Additionally, you may need to configure the ANDROID_HOME environment variable in your bash_profile (or equivalent shell configuration file). If you get stuck, contact Will, or do searches for "how to setup ANDROID_HOME variable"
+Tools > Android > SDK Manager and install the following:
+SDK Platforms
+API Level 25 (Nougat)
+SDK Tools
+Google Location services (v39)
+Additionally, you may need to have updated java setup on your system, if you're getting error messages about this. 
+Overview of Basic Features in AndroidStudio
+Rag Tag
+Clone the RagTag code repository from Bitbucket. instructions 
+install git if you don't have it
+git clone https://wcapozzoli124@bitbucket.org/wcapozzoli124/ragtag.git 
+Android Studio & Rag Tag
+Open Rag Tag in Android Studio
+Build
+Run on an AVD (emulator). It may ask you to setup an AVD. Select API Level 25 to start.
+Set up the camera preview on the AVD - set the AVD's default camera to the Webcame of your computer 
+Tools > Android > AVD Manager > Edit (pencil) > Show Advanced Settings > set Camera Front and Camera Back to to Webcam0
+Run on your Android smartphone. Connect your android device by USB cable to your computer. This uses the ADB (Android Debug Bridge) to establish the connection.
+*Android Studio 2.3.1 will most likely run on your computer without errors, but it failed on mine due to a known bug, so I reverted back to version 2.2.X. here is a fix that can be implemented by updating AndroidStudio's Contents/MacOS/studio launcher file, though I may wait for 2.4.X or the next 2.3.X
+
+
+

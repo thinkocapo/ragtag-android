@@ -1,0 +1,34 @@
+04/20/17
+V3.5.0
+
+How to Link the Firebase Cloud Functions Project to your Local Machine, and Deploy
+
+
+Overview and instructions of how it works. Same instructions i used:
+https://firebase.google.com/docs/functions/get-started
+
+0. 
+npm install -g firebase-tools
+
+1.
+git clone https://wcapozzoli124@bitbucket.org/wcapozzoli124/ragtagcloudfunctions.git
+
+2.
+firebase login
+cd project
+firebase init functions
+
+You’ll be asked to create a new project, or choose an existing. If the Firebase Project administrator (William) shared permissions with you, then you should see it as an option. Select it, and you can skip step 2.
+
+3. If you’re creating a new project then select cloud functions:
+- firebase database
++ firebase cloud functions
+- firebase hosting
+
+4. Make your updates (i.e. write your CloudFunctions in project/index.js) then deploy
+firebase deploy --only functions
+
+
+Extra:
+Cloud Functions Emulator (run locally. I’ve never tried this with ragtag)
+

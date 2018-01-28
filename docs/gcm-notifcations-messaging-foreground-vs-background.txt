@@ -1,0 +1,101 @@
+Foreground Notifications
+I.e. when app activity is running
+No push notification is received in the notification bar
+However, onMessageReceived() is still called and the data payload is accessible
+This happens in MyFirebaseMessagingService.java (call it ForegroundMessagingService.java in ragTag)
+Log information viewable under ‘Verbose’ option, not ‘Info’.
+Data comes into the callback as RemoteMessage type
+
+Background Notifications
+I.e. when app activity is in paused state (user put app to the background)
+Push notification is received in notification bar
+onCreate() is executed and data payload is accessible
+This happens in OnPushNotification.java (call it BackgroundMessagingService.java in ragTag)
+Uses android intent-filter to receive the click_action notification and start the onCreate() method of BackgroundMessagingService activity
+Log information viewable under ‘Info’ option
+Scroll down and see Background_Notes for more info on how this works
+Data comes into the callback as Bundle type.
+
+Message will not come through as both foreground and background type at same time. It will always be one or the other.
+
+Problem: What if user doesn’t have app running in foreground or background? E.g. phone is off
+Solution: When user starts the app, app does http request (CloudFunction) for update on what happened (i.e. current latlong’s of all users, and tag history (i.e. who tagged me recently)) 
+
+Solution:
+onResume() onStart()
+Get updated latlong’s of all users and render on map (googleMap?)
+Get tag history (history of who tagged the user while user’s app was paused or off)
+Visual indicator on map of which users were the taggers
+Send updated latlong (for other users to see)
+
+Phase1:
+Fixed view Google Map (earth or navigation) in MainActivity. Show users on it.
+Data Model https://firebase.google.com/docs/database/web/structure-data
+
+Phase2:
+Sound, images for users
+Geofences
+
+Notes:
+Searched “how to get payload from notification in system tray”
+http://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase
+
+HowTo:
+People on stackoverflow say Firebase Console won’t trigger onMessageReceived(), so you need to hit this endpoint instead (using REST API client like Postman):
+
+Setup - Create a class called OnPushNotification (or use your MainActivity Class?)
+AndroidManifest.xml
+<activity android:name=".OnPushNotification">
+   <intent-filter>
+       <action android:name=".OnPushNotification"/>
+       <category android:name="android.intent.category.DEFAULT"/>
+   </intent-filter>
+</activity>
+
+Log in the onCreate() method and access the received intent’s data through bundle:
+Bundle bundle = getIntent().getExtras();
+if (bundle != null) {
+   Log.i(TAG, "onCreate() | there's a bundle");
+   //bundle must contain all info sent in "data" field of the notification
+}
+
+
+2. 
+https://fcm.googleapis.com/fcm/send
+
+Headers:
+Content-Type: application/json
+Authorization: key={key_from_FirebaseConsole>Settings>ProjectSettings>CloudMessaging>ServerKey}
+body:
+{ 
+ "notification" : {
+        "click_action" : ".OnPushNotification", 
+        "body" : "details about tagging", 
+        "title" : "You got tagged!"
+ "data": { 
+ 	"will_custom_key" : "will_custom_value2",
+    "will_other_key" : true
+ },
+ "to" : "{your_AppToken_From_FirebaseInstanceIdService} }
+
+Response:
+{
+  "multicast_id": 5280269500366036671,
+  "success": 1,
+  "failure": 0,
+  "canonical_ids": 0,
+  "results": [
+    {
+      "message_id": "0:1493591189157860%ad09dfc2ad09dfc2"
+    }
+  ]
+}
+
+
+Background_Notes:
+Push Notification is received in Background (app is in Paused (minimized) state)
+Click the push notification and it opens the app, and OnPushNotification.onCreate() executes
+‘Click_action’ was also an option
+The data should be in the Bundle. bundle_instance.toString() or other getters by key
+The first time that FirebaseInstanceIdService generates your token, make sure you write it down, because I can’t get onTokenRefresh() to execute ever again. One time only?
+
