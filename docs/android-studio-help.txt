@@ -1,0 +1,2 @@
+### Tips
+Select *Project Files* in the file viewer instead of Project and you'll see more files
