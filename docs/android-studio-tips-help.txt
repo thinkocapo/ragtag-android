@@ -1,0 +1,7 @@
+### Tips
+If you can't find a file in the Project viewer, try changing its dropdown to/from *Project Files* or *Project* and you might find your files
+
+#### Logcat - Android Console
+For viewing INFO and ERRORS
+Change the dropdown between INFO and ERRORS
+To find logs you're writing in an activity, for example, type 'MainActivity' in the search field and it will show all the logs from MainActivity, becaused they used LOG_TAG='MainActivity'
