@@ -30,12 +30,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationListener;
 
-
-
-// 4/28 8:23p trying Firebase Assistant https://firebase.google.com/docs/android/setup#next_steps
+// Firebase Assistant https://firebase.google.com/docs/android/setup#next_steps
 // previous time was done with https://cloud.google.com/solutions/mobile/firebase-app-engine-android-studio#adding_a_user_interface_to_your_android_app
 
- //8:41p ran Firebase Assistant and now these packages are recognized
+// ran Firebase Assistant and now these packages are recognized
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,10 +43,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
-
 // extends ApplicationContext
-
-// 4/23 7:07p video 0:20 says there's a 3rd to implement?
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String LOG_TAG ="MainActivity";
     private TextView txtOutput;
@@ -68,14 +63,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         txtOutput = (TextView) findViewById(R.id.txtOutput);
 
-        //super.onStart(); // need .onStart. need to extend ApplicationContext instead of AppCompatActivity
-//        onStart(); 4/23 7:54P something else is calling this?
+        // super.onStart(); // need .onStart. need to extend ApplicationContext instead of AppCompatActivity
+        // onStart(); // something else is calling this?
 
-        Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(myIntent);
-
-
+        // Disabling Camera Activity because its not needed for basic app
+        //Intent myIntent = new Intent(getBaseContext(), CameraActivity.class);
+        //myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(myIntent);
     }
 
     @Override
@@ -104,30 +98,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     @Override
     protected void onStart() {
-        Log.i(LOG_TAG, "onStart() called");
+        Log.i(LOG_TAG, "onStart()");
         super.onStart();
-
-        // 4/23 8:09p Had to add this code because it wants Run-Time Permission http://stackoverflow.com/questions/38508352/client-must-have-access-fine-location-permission-to-request-priority-high-accura
-        // Check for permission
         mGoogleApiClient.connect();
-        //4/29 11:28a moved this check permission code to onConnected
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            Log.i(LOG_TAG, "onStart() location permission was not granted...");
-//            ActivityCompat.requestPermissions(
-//                    this, // Activity
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-//        } else {
-//            Log.i(LOG_TAG, "onStart() location permission was granted?");
-//            mGoogleApiClient.connect();
-//        }
-
     }
 
     // Get permission result - never gets called?
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.i(LOG_TAG, "onRequestPermissionResult(cb) called...");
 
         switch (requestCode) {
@@ -157,22 +135,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onStop();
     }
 
+    // Run-Time Permission http://stackoverflow.com/questions/38508352/client-must-have-access-fine-location-permission-to-request-priority-high-accura
     @Override
     public void onConnected(Bundle bundle) {
-        Log.v(LOG_TAG, " onConnected... ");
+        Log.v(LOG_TAG, " onConnected()");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(10000);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.i(LOG_TAG, "onStart() location permission was not granted...");
+            Log.i(LOG_TAG, "onConnected() location permission was not granted");
             ActivityCompat.requestPermissions(
                     this, // Activity
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         } else {
-            Log.i(LOG_TAG, "onConnected()... location permission was granted?");
-//            mGoogleApiClient.connect();
+            Log.i(LOG_TAG, "onConnected() location permission was granted");
+            // mGoogleApiClient.connect();
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
         }
@@ -183,25 +162,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onLocationChanged(Location location) {
         Log.v(LOG_TAG, " onLocationChanged()");
 
-        // 4/29 1:50p
-//        final Location aLocation = location;
+        // final Location aLocation = location;
         latlong = prepareLatLongString(location); // Jva CharaSequence
 
 
         txtOutput.post(new Runnable(){
             @Override
             public void run(){
-//                txtOutput.setText(aLocation.toString()); commented out 1:52p
-
-                // 4/29 1:52p
+                // txtOutput.setText(aLocation.toString());
                 txtOutput.setText(latlong);
-                txtOutput.invalidate(); // still displays 4/29 1:54p
+                txtOutput.invalidate();
 
                 Log.i(LOG_TAG, "onLocationChanged() | Latitude/Longitude | " + latlong);
 
-//                CharSequence text = txtOutput.getText();
-//                String latlong = text.toString();
-
+                // CharSequence text = txtOutput.getText();
+                // String latlong = text.toString();
                 sendGeoUpdate(latlong);
             }
         });
@@ -218,16 +193,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
-
-    /*
-    // ragtag variables
-     */
     private String deviceId;
-
-    /*
-    // ragtag methods
-    // 4/22 7:16p
-     */
 
     public String prepareLatLongString(Location location) {
         double latitude = location.getLatitude();
@@ -237,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void sendGeoUpdate(String latlong) {
         Log.i(LOG_TAG, "sendGeoUpdate() | latlong " + latlong);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference users = database.getReference("users");
-        // 4/29 12:31p
+
         // reference 'latLong' is the Key (table) underneath root ragtag db
-        // 1:39p
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.i(LOG_TAG, "sendGeoUpdate() | deviceId " + deviceId);
         users.child(deviceId).setValue(latlong); // target (destino, user2), latlong de user1,

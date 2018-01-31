@@ -73,9 +73,9 @@ public class CameraActivity extends Activity {
         @Override
         public void onOpened(CameraDevice camera) {
             mCameraDevice = camera;
-//            Toast.makeText(getApplicationContext(), "Camera Opened, Will!", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "Camera Opened, Will!", Toast.LENGTH_SHORT).show();
 
-            // Nigel Part 4 : * https://www.youtube.com/watch?v=xK9fvxGzM1Q 2:04
+            // https://www.youtube.com/watch?v=xK9fvxGzM1Q 2:04 Part 4
             createCameraPreviewSession();
         }
 
